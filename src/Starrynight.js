@@ -1,0 +1,45 @@
+import React, { useState, useRef } from "react";
+import { useLoader } from "@react-three/fiber";
+import { useSpring, animated } from "@react-spring/three";
+import { TextureLoader } from "three/src/loaders/TextureLoader.js";
+
+function Starrynight() {
+  const mesh = useRef();
+
+  const PictureTexture = useLoader(TextureLoader, "./imgs/starrynight.jpg");
+
+  const [active, setActive] = useState(false);
+
+  const { scale, position, rotation } = useSpring({
+    scale: active ? [3, 3.5, 3] : [2, 2.5, 2],
+    position: active ? [0, 0, 3] : [0.4, 0, 0.9],
+    rotation: active ? [0, 0, 0] : [0, -0.4, 0],
+  });
+
+  // useFrame(() => {
+  //   mesh.current.rotation.y += 0.01;
+  // });
+
+  return (
+    <animated.mesh
+      ref={mesh}
+      onClick={() => {
+        setActive(!active);
+      }}
+      scale={scale}
+      position={position}
+      rotation={rotation}
+    >
+      <boxGeometry args={[2.7, 1.3, 0.1]} />
+      <meshStandardMaterial
+        map={PictureTexture}
+        roughness={2}
+        metalness={0.1}
+        attach="material"
+        color={"#d2b48c"}
+      />
+    </animated.mesh>
+  );
+}
+
+export default Starrynight;
